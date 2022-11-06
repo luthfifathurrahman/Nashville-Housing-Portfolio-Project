@@ -419,26 +419,26 @@ WITH CTE_Removing_Duplicates AS
 (
 SELECT *,
 ROW_NUMBER() OVER(PARTITION BY ParcelID,
-								LandUse,
-								SalePrice,
-								LegalReference,
-								SoldAsVacant,
-								OwnerName,
-								Acreage,
-								TaxDistrict,
-								LandValue,
-								BuildingValue,
-								TotalValue,
-								YearBuilt,
-								Bedrooms,
-								FullBath,
-								HalfBath,
-								PropertySplitAddress,
-								PropertySplitCity,
-								SaleDateConverted,
-								OwnerSplitAddress,
-								OwnerSplitCity,
-								OwnerSplitState ORDER BY ParcelID) AS RN
+		  LandUse,
+		  SalePrice,
+		  LegalReference,
+		  SoldAsVacant,
+		  OwnerName,
+		  Acreage,
+		  TaxDistrict,
+		  LandValue,
+		  BuildingValue,
+		  TotalValue,
+		  YearBuilt,
+		  Bedrooms,
+		  FullBath,
+		  HalfBath,
+		  PropertySplitAddress,
+		  PropertySplitCity,
+		  SaleDateConverted,
+		  OwnerSplitAddress,
+		  OwnerSplitCity,
+		  OwnerSplitState ORDER BY ParcelID) AS RN
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 )
 DELETE FROM CTE_Removing_Duplicates
@@ -451,6 +451,7 @@ SELECT *
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 ORDER BY [UniqueID ]
 
+-- Showing The Amount of Land Use With The Average Sale Price
 SELECT DISTINCT(LandUse),
 COUNT(LandUse) AS AmountOfLandUse, 
 AVG(SalePrice) AS AVGSalePrice
@@ -458,16 +459,19 @@ FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY LandUse
 ORDER BY AmountOfLandUse DESC
 
+-- Showing The Amount of Sold As Vacant
 SELECT DISTINCT SoldAsVacant, COUNT(SoldAsVacant) AS AmountOfSoldAsVacant
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY SoldAsVacant
 ORDER BY AmountOfSoldAsVacant DESC
 
+-- Showing Who Has The Most Property Sold
 SELECT DISTINCT OwnerName, COUNT(OwnerName) AS AmountOfOwnerName
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY OwnerName
 ORDER BY AmountOfOwnerName DESC
 
+-- Showing Which City Has The Most Property Sold
 SELECT DISTINCT PropertySplitCity, COUNT(PropertySplitCity) AS AmountOfPropertySplitCity, AVG(SalePrice) AS AVGSalePrice
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY PropertySplitCity
