@@ -419,26 +419,26 @@ WITH CTE_Removing_Duplicates AS
 (
 SELECT *,
 ROW_NUMBER() OVER(PARTITION BY ParcelID,
-		  LandUse,
-		  SalePrice,
-		  LegalReference,
-		  SoldAsVacant,
-		  OwnerName,
-		  Acreage,
-		  TaxDistrict,
-		  LandValue,
-		  BuildingValue,
-		  TotalValue,
-		  YearBuilt,
-		  Bedrooms,
-		  FullBath,
-		  HalfBath,
-		  PropertySplitAddress,
-		  PropertySplitCity,
-		  SaleDateConverted,
-		  OwnerSplitAddress,
-		  OwnerSplitCity,
-		  OwnerSplitState ORDER BY ParcelID) AS RN
+								LandUse,
+								SalePrice,
+								LegalReference,
+								SoldAsVacant,
+								OwnerName,
+								Acreage,
+								TaxDistrict,
+								LandValue,
+								BuildingValue,
+								TotalValue,
+								YearBuilt,
+								Bedrooms,
+								FullBath,
+								HalfBath,
+								PropertySplitAddress,
+								PropertySplitCity,
+								SaleDateConverted,
+								OwnerSplitAddress,
+								OwnerSplitCity,
+								OwnerSplitState ORDER BY ParcelID) AS RN
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 )
 DELETE FROM CTE_Removing_Duplicates
@@ -459,20 +459,58 @@ FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY LandUse
 ORDER BY AmountOfLandUse DESC
 
+-- Creating View For The Amount of Land Use With The Average Sale Price
+CREATE VIEW AmountLandUseAverageSale AS
+SELECT DISTINCT(LandUse),
+COUNT(LandUse) AS AmountOfLandUse, 
+AVG(SalePrice) AS AVGSalePrice
+FROM NashvilleHousingPortfolioProject..NashvilleHousing
+GROUP BY LandUse
+
+SELECT *
+FROM AmountLandUseAverageSale
+
 -- Showing The Amount of Sold As Vacant
 SELECT DISTINCT SoldAsVacant, COUNT(SoldAsVacant) AS AmountOfSoldAsVacant
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY SoldAsVacant
 ORDER BY AmountOfSoldAsVacant DESC
 
+-- Creating View For The Amount of Sold As Vacant
+CREATE VIEW AmountSoldAsVacant AS
+SELECT DISTINCT SoldAsVacant, COUNT(SoldAsVacant) AS AmountOfSoldAsVacant
+FROM NashvilleHousingPortfolioProject..NashvilleHousing
+GROUP BY SoldAsVacant
+
+SELECT *
+FROM AmountSoldAsVacant
+
 -- Showing Who Has The Most Property Sold
-SELECT DISTINCT OwnerName, COUNT(OwnerName) AS AmountOfOwnerName
+SELECT OwnerName, COUNT(OwnerName) AS AmountOfOwnerName
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY OwnerName
 ORDER BY AmountOfOwnerName DESC
 
+-- Creating View For Who Has The Most Property Sold
+CREATE VIEW WhoHasTheMostPropertySold AS
+SELECT OwnerName, COUNT(OwnerName) AS AmountOfOwnerName
+FROM NashvilleHousingPortfolioProject..NashvilleHousing
+GROUP BY OwnerName
+
+SELECT *
+FROM WhoHasTheMostPropertySold
+
 -- Showing Which City Has The Most Property Sold
-SELECT DISTINCT PropertySplitCity, COUNT(PropertySplitCity) AS AmountOfPropertySplitCity, AVG(SalePrice) AS AVGSalePrice
+SELECT PropertySplitCity, COUNT(PropertySplitCity) AS AmountOfPropertySplitCity, AVG(SalePrice) AS AVGSalePrice
 FROM NashvilleHousingPortfolioProject..NashvilleHousing
 GROUP BY PropertySplitCity
 ORDER BY AmountOfPropertySplitCity DESC
+
+-- Creating View For Which City Has The Most Property Sold
+CREATE VIEW WhichCityHasTheMostPropertySold AS
+SELECT PropertySplitCity, COUNT(PropertySplitCity) AS AmountOfPropertySplitCity, AVG(SalePrice) AS AVGSalePrice
+FROM NashvilleHousingPortfolioProject..NashvilleHousing
+GROUP BY PropertySplitCity
+
+SELECT *
+FROM WhichCityHasTheMostPropertySold
